@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueFox.AM", "BlueFox.AM\Bl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueFox.AM.Setting", "BlueFox.AM.Setting\BlueFox.AM.Setting.csproj", "{F78286F2-C70F-4B8D-83AC-FA31BBA8B034}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueFox.Security", "..\..\BlueFox\Src\Server\BlueFox.Security\BlueFox.Security.csproj", "{5077E370-A524-421A-88E5-5D3A2E142B56}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,16 @@ Global
 		{F78286F2-C70F-4B8D-83AC-FA31BBA8B034}.Release|Mixed Platforms.Build.0 = Release|x86
 		{F78286F2-C70F-4B8D-83AC-FA31BBA8B034}.Release|x86.ActiveCfg = Release|x86
 		{F78286F2-C70F-4B8D-83AC-FA31BBA8B034}.Release|x86.Build.0 = Release|x86
+		{5077E370-A524-421A-88E5-5D3A2E142B56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5077E370-A524-421A-88E5-5D3A2E142B56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5077E370-A524-421A-88E5-5D3A2E142B56}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5077E370-A524-421A-88E5-5D3A2E142B56}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5077E370-A524-421A-88E5-5D3A2E142B56}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5077E370-A524-421A-88E5-5D3A2E142B56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5077E370-A524-421A-88E5-5D3A2E142B56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5077E370-A524-421A-88E5-5D3A2E142B56}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5077E370-A524-421A-88E5-5D3A2E142B56}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5077E370-A524-421A-88E5-5D3A2E142B56}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

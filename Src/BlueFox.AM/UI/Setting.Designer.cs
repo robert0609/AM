@@ -1,6 +1,6 @@
 ﻿namespace BlueFox.AM.UI
 {
-    partial class Index
+    partial class Setting
     {
         /// <summary>
         /// Required designer variable.

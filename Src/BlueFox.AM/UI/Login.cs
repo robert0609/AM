@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace BlueFox.AM.UI
 {
-    public partial class Index : Form
+    public partial class Login : Form
     {
-        public Index()
+        public Login()
         {
             InitializeComponent();
         }
