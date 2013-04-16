@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace BlueFox.AM.UI
 {
-    public partial class Setting : Form
+    public partial class Home : BaseForm
     {
-        public Setting()
+        public Home()
         {
             InitializeComponent();
         }

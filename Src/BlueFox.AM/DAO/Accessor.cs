@@ -37,7 +37,7 @@ namespace BlueFox.AM.DAO
             IList<Account> ret = new List<Account>();
             using (SQLiteCommand cmd = new SQLiteCommand(this._con))
             {
-                cmd.CommandText = "Select * from Account " + condition.ToWhereString();
+                cmd.CommandText = string.Format("Select * from Account {0} order by SiteName", condition.ToWhereString());
                 var dataReader = cmd.ExecuteReader();
                 while (dataReader.Read())
                 {
@@ -51,6 +51,28 @@ namespace BlueFox.AM.DAO
                     };
                     ret.Add(acc);
                 }
+            }
+            return ret;
+        }
+
+        public int Insert(Account account)
+        {
+            int ret = 0;
+            using (SQLiteCommand cmd = new SQLiteCommand(this._con))
+            {
+                cmd.CommandText = string.Format("Insert into Account values({0})", account.ToValueString());
+                ret = cmd.ExecuteNonQuery();
+            }
+            return ret;
+        }
+
+        public int Update(Account account)
+        {
+            int ret = 0;
+            using (SQLiteCommand cmd = new SQLiteCommand(this._con))
+            {
+                cmd.CommandText = string.Format("Update Account Set {0} where Id = '{1}'", account.ToSetString(), account.Id);
+                ret = cmd.ExecuteNonQuery();
             }
             return ret;
         }

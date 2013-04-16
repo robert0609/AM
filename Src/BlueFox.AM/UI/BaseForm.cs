@@ -11,25 +11,7 @@ using System.Threading;
 
 namespace BlueFox.AM.UI
 {
-    public class RemovableDriveEventArgs : EventArgs
-    {
-        public DriveInfo RemovableDrive
-        {
-            get;
-            private set;
-        }
-
-        public RemovableDriveEventArgs(DriveInfo drive)
-        {
-            this.RemovableDrive = drive;
-        }
-    }
-
-    public delegate void DelegateRemovableDriveArrived(object sender, RemovableDriveEventArgs e);
-
-    public delegate void DelegateRemovableDrivePulled(object sender, RemovableDriveEventArgs e);
-
-    public abstract partial class BaseForm : Form
+    public partial class BaseForm : Form
     {
         protected const int WM_DEVICECHANGE = 0x219;//U盘插入后，OS的底层会自动检测到，然后向应用程序发送“硬件设备状态改变“的消息
         protected const int DBT_DEVICEARRIVAL = 0x8000;  //就是用来表示U盘可用的。一个设备或媒体已被插入一块，现在可用。
