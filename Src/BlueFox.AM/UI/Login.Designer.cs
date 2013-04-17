@@ -113,7 +113,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtUid;
         private System.Windows.Forms.TextBox txtPwd;
-        private System.Windows.Forms.Button btnLogin;
-        private System.Windows.Forms.Button btnExit;
+        public System.Windows.Forms.Button btnLogin;
+        public System.Windows.Forms.Button btnExit;
     }
 }

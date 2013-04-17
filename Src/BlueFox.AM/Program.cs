@@ -16,9 +16,8 @@ namespace BlueFox.AM
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            (new Login()).Show();
             Application.Run();
-
-            Application.Run(new Home());
         }
     }
 }
