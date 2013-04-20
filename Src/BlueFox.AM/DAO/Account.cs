@@ -40,17 +40,59 @@ namespace BlueFox.AM.DAO
             set;
         }
 
+        public string this[string propertyName]
+        {
+            get
+            {
+                switch (propertyName)
+                {
+                    case "Id":
+                        return this.Id;
+                    case "SiteName":
+                        return this.SiteName;
+                    case "URL":
+                        return this.URL;
+                    case "UserName":
+                        return this.UserName;
+                    case "Password":
+                        return this.Password;
+                    default:
+                        return null;
+                }
+            }
+            set
+            {
+                switch (propertyName)
+                {
+                    case "Id":
+                        this.Id = value;
+                        break;
+                    case "SiteName":
+                        this.SiteName = value;
+                        break;
+                    case "URL":
+                        this.URL = value;
+                        break;
+                    case "UserName":
+                        this.UserName = value;
+                        break;
+                    case "Password":
+                        this.Password = value;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
         public string ToValueString()
         {
             StringBuilder sb = new StringBuilder();
             if (string.IsNullOrEmpty(this.Id))
             {
-                sb.Append(string.Format(INSERT_VALUE, Guid.NewGuid().ToString()));
+                this.Id = Guid.NewGuid().ToString();
             }
-            else
-            {
-                sb.Append(string.Format(INSERT_VALUE, this.Id));
-            }
+            sb.Append(string.Format(INSERT_VALUE, this.Id));
             sb.Append(',');
             if (string.IsNullOrEmpty(this.SiteName))
             {

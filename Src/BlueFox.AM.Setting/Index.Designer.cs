@@ -30,20 +30,20 @@
         {
             this.tbcMain = new System.Windows.Forms.TabControl();
             this.tpAuthority = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnGenerateAuth = new System.Windows.Forms.Button();
             this.tpRegister = new System.Windows.Forms.TabPage();
+            this.btnRegister = new System.Windows.Forms.Button();
+            this.txtPassword = new System.Windows.Forms.TextBox();
+            this.txtUserName = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.tpCert = new System.Windows.Forms.TabPage();
             this.btnGenerate = new System.Windows.Forms.Button();
             this.txtCurrentPublicKeyFile = new System.Windows.Forms.TextBox();
             this.txtCurrentPrivateKeyFile = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.btnGenerateAuth = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtUserName = new System.Windows.Forms.TextBox();
-            this.txtPassword = new System.Windows.Forms.TextBox();
-            this.btnRegister = new System.Windows.Forms.Button();
             this.tbcMain.SuspendLayout();
             this.tpAuthority.SuspendLayout();
             this.tpRegister.SuspendLayout();
@@ -55,8 +55,8 @@
             this.tbcMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbcMain.Controls.Add(this.tpAuthority);
             this.tbcMain.Controls.Add(this.tpRegister);
+            this.tbcMain.Controls.Add(this.tpAuthority);
             this.tbcMain.Controls.Add(this.tpCert);
             this.tbcMain.Location = new System.Drawing.Point(12, 12);
             this.tbcMain.Name = "tbcMain";
@@ -68,13 +68,31 @@
             // 
             this.tpAuthority.Controls.Add(this.label3);
             this.tpAuthority.Controls.Add(this.btnGenerateAuth);
-            this.tpAuthority.Location = new System.Drawing.Point(4, 21);
+            this.tpAuthority.Location = new System.Drawing.Point(4, 22);
             this.tpAuthority.Name = "tpAuthority";
             this.tpAuthority.Padding = new System.Windows.Forms.Padding(3);
-            this.tpAuthority.Size = new System.Drawing.Size(760, 169);
+            this.tpAuthority.Size = new System.Drawing.Size(760, 168);
             this.tpAuthority.TabIndex = 0;
             this.tpAuthority.Text = "Authorize";
             this.tpAuthority.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.label3.Location = new System.Drawing.Point(282, 64);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(349, 28);
+            this.label3.TabIndex = 1;
+            this.label3.Text = "* The generated auth file should be copied to [C:] root directory.";
+            // 
+            // btnGenerateAuth
+            // 
+            this.btnGenerateAuth.Location = new System.Drawing.Point(94, 64);
+            this.btnGenerateAuth.Name = "btnGenerateAuth";
+            this.btnGenerateAuth.Size = new System.Drawing.Size(170, 28);
+            this.btnGenerateAuth.TabIndex = 0;
+            this.btnGenerateAuth.Text = "Generate Auth File";
+            this.btnGenerateAuth.UseVisualStyleBackColor = true;
             // 
             // tpRegister
             // 
@@ -83,13 +101,54 @@
             this.tpRegister.Controls.Add(this.txtUserName);
             this.tpRegister.Controls.Add(this.label5);
             this.tpRegister.Controls.Add(this.label4);
-            this.tpRegister.Location = new System.Drawing.Point(4, 21);
+            this.tpRegister.Location = new System.Drawing.Point(4, 22);
             this.tpRegister.Name = "tpRegister";
             this.tpRegister.Padding = new System.Windows.Forms.Padding(3);
-            this.tpRegister.Size = new System.Drawing.Size(760, 169);
+            this.tpRegister.Size = new System.Drawing.Size(760, 168);
             this.tpRegister.TabIndex = 1;
             this.tpRegister.Text = "Register";
             this.tpRegister.UseVisualStyleBackColor = true;
+            // 
+            // btnRegister
+            // 
+            this.btnRegister.Location = new System.Drawing.Point(400, 117);
+            this.btnRegister.Name = "btnRegister";
+            this.btnRegister.Size = new System.Drawing.Size(92, 28);
+            this.btnRegister.TabIndex = 4;
+            this.btnRegister.Text = "Register";
+            this.btnRegister.UseVisualStyleBackColor = true;
+            // 
+            // txtPassword
+            // 
+            this.txtPassword.Location = new System.Drawing.Point(291, 73);
+            this.txtPassword.Name = "txtPassword";
+            this.txtPassword.Size = new System.Drawing.Size(201, 19);
+            this.txtPassword.TabIndex = 3;
+            // 
+            // txtUserName
+            // 
+            this.txtUserName.Location = new System.Drawing.Point(291, 38);
+            this.txtUserName.Name = "txtUserName";
+            this.txtUserName.Size = new System.Drawing.Size(201, 19);
+            this.txtUserName.TabIndex = 2;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(208, 76);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(61, 12);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "Password";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(201, 41);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(68, 12);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "User Name";
             // 
             // tpCert
             // 
@@ -98,9 +157,9 @@
             this.tpCert.Controls.Add(this.txtCurrentPrivateKeyFile);
             this.tpCert.Controls.Add(this.label2);
             this.tpCert.Controls.Add(this.label1);
-            this.tpCert.Location = new System.Drawing.Point(4, 21);
+            this.tpCert.Location = new System.Drawing.Point(4, 22);
             this.tpCert.Name = "tpCert";
-            this.tpCert.Size = new System.Drawing.Size(760, 169);
+            this.tpCert.Size = new System.Drawing.Size(760, 168);
             this.tpCert.TabIndex = 2;
             this.tpCert.Text = "Certificates";
             this.tpCert.UseVisualStyleBackColor = true;
@@ -147,65 +206,6 @@
             this.label1.Size = new System.Drawing.Size(173, 12);
             this.label1.TabIndex = 0;
             this.label1.Text = "Current Private Key File";
-            // 
-            // btnGenerateAuth
-            // 
-            this.btnGenerateAuth.Location = new System.Drawing.Point(94, 64);
-            this.btnGenerateAuth.Name = "btnGenerateAuth";
-            this.btnGenerateAuth.Size = new System.Drawing.Size(170, 28);
-            this.btnGenerateAuth.TabIndex = 0;
-            this.btnGenerateAuth.Text = "Generate Auth File";
-            this.btnGenerateAuth.UseVisualStyleBackColor = true;
-            // 
-            // label3
-            // 
-            this.label3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.label3.Location = new System.Drawing.Point(282, 64);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(349, 28);
-            this.label3.TabIndex = 1;
-            this.label3.Text = "* The generated auth file should be copied to [C:] root directory.";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(201, 41);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(68, 12);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "User Name";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(208, 76);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(61, 12);
-            this.label5.TabIndex = 1;
-            this.label5.Text = "Password";
-            // 
-            // txtUserName
-            // 
-            this.txtUserName.Location = new System.Drawing.Point(291, 38);
-            this.txtUserName.Name = "txtUserName";
-            this.txtUserName.Size = new System.Drawing.Size(201, 19);
-            this.txtUserName.TabIndex = 2;
-            // 
-            // txtPassword
-            // 
-            this.txtPassword.Location = new System.Drawing.Point(291, 73);
-            this.txtPassword.Name = "txtPassword";
-            this.txtPassword.Size = new System.Drawing.Size(201, 19);
-            this.txtPassword.TabIndex = 3;
-            // 
-            // btnRegister
-            // 
-            this.btnRegister.Location = new System.Drawing.Point(400, 117);
-            this.btnRegister.Name = "btnRegister";
-            this.btnRegister.Size = new System.Drawing.Size(92, 28);
-            this.btnRegister.TabIndex = 4;
-            this.btnRegister.Text = "Register";
-            this.btnRegister.UseVisualStyleBackColor = true;
             // 
             // Index
             // 

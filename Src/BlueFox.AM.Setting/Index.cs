@@ -90,6 +90,15 @@ namespace BlueFox.AM.Setting
                     {
                         cmd.ExecuteNonQuery();
                     }
+                    using (SQLiteCommand cmd = new SQLiteCommand("Create table MetaInfo(Id varchar(36))", conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
+                    //插入验证数据
+                    using (SQLiteCommand cmd = new SQLiteCommand(string.Format("Insert into MetaInfo values('{0}')", this.txtUserName.Text), conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                    }
 
                     conn.Close();
                 }

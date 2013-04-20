@@ -30,6 +30,11 @@ namespace BlueFox.AM.DAO
             connsb.Password = pwd;
             this._con.ConnectionString = connsb.ToString();
             this._con.Open();
+            using (SQLiteCommand cmd = new SQLiteCommand(this._con))
+            {
+                cmd.CommandText = "Select * from MetaInfo";
+                cmd.ExecuteReader();
+            }
         }
 
         public IList<Account> Select(Condition condition)
@@ -55,13 +60,14 @@ namespace BlueFox.AM.DAO
             return ret;
         }
 
-        public int Insert(Account account)
+        public string Insert(Account account)
         {
-            int ret = 0;
+            string ret = string.Empty;
             using (SQLiteCommand cmd = new SQLiteCommand(this._con))
             {
                 cmd.CommandText = string.Format("Insert into Account values({0})", account.ToValueString());
-                ret = cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
+                ret = account.Id;
             }
             return ret;
         }
@@ -72,6 +78,17 @@ namespace BlueFox.AM.DAO
             using (SQLiteCommand cmd = new SQLiteCommand(this._con))
             {
                 cmd.CommandText = string.Format("Update Account Set {0} where Id = '{1}'", account.ToSetString(), account.Id);
+                ret = cmd.ExecuteNonQuery();
+            }
+            return ret;
+        }
+
+        public int Delete(Account account)
+        {
+            int ret = 0;
+            using (SQLiteCommand cmd = new SQLiteCommand(this._con))
+            {
+                cmd.CommandText = string.Format("Delete from Account where Id = '{0}'", account.Id);
                 ret = cmd.ExecuteNonQuery();
             }
             return ret;

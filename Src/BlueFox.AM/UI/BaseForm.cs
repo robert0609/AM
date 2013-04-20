@@ -35,13 +35,8 @@ namespace BlueFox.AM.UI
         public BaseForm()
         {
             InitializeComponent();
-        }
-
-        protected override void OnLoad(EventArgs e)
-        {
             DriveInfo[] s = DriveInfo.GetDrives();
             this.currentRemovableDrives = (from loop in s where loop.DriveType == DriveType.Removable select loop).ToList();
-            base.OnLoad(e);
         }
 
         protected virtual void OnRemovableDriveArrived(DriveInfo d)

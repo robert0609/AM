@@ -67,6 +67,7 @@
             this.txtPwd.Name = "txtPwd";
             this.txtPwd.Size = new System.Drawing.Size(167, 19);
             this.txtPwd.TabIndex = 3;
+            this.txtPwd.UseSystemPasswordChar = true;
             // 
             // btnLogin
             // 
@@ -97,10 +98,8 @@
             this.Controls.Add(this.txtUid);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Font = new System.Drawing.Font("Lucida Console", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "Login";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Login";
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -113,7 +112,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtUid;
         private System.Windows.Forms.TextBox txtPwd;
-        public System.Windows.Forms.Button btnLogin;
-        public System.Windows.Forms.Button btnExit;
+        private System.Windows.Forms.Button btnLogin;
+        private System.Windows.Forms.Button btnExit;
     }
 }
