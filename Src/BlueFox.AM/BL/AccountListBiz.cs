@@ -26,7 +26,8 @@ namespace BlueFox.AM.BL
         {
             var dat = this.GetAccountList();
             this.View.DataSource = dat;
-            Application.Run(this.View);
+            this.View.ShowDialog();
+            //Application.Run(this.View);
         }
 
         private DataTable GetAccountList()

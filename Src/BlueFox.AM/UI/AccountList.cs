@@ -35,6 +35,58 @@ namespace BlueFox.AM.UI
             this.deleteRowToolStripMenuItem.Click += new EventHandler(deleteRowToolStripMenuItem_Click);
             this.dgvPrivate.CellEndEdit += new DataGridViewCellEventHandler(dgvPrivate_CellEndEdit);
             this.dgvPrivate.CellClick += new DataGridViewCellEventHandler(dgvPrivate_CellClick);
+            //this.RemovableDriveArrived += new DelegateRemovableDriveArrived(AccountList_RemovableDriveArrived);
+            this.RemovableDrivePulled += new DelegateRemovableDrivePulled(AccountList_RemovableDrivePulled);
+        }
+
+        private void AccountList_RemovableDrivePulled(object sender, RemovableDriveEventArgs e)
+        {
+            this._access.Dispose();
+            this._access = null;
+            this.DataSource = null;
+            this.addRowToolStripMenuItem.Enabled = false;
+            this.deleteRowToolStripMenuItem.Enabled = false;
+        }
+
+        private void AccountList_RemovableDriveArrived(object sender, RemovableDriveEventArgs e)
+        {
+            this.addRowToolStripMenuItem.Enabled = true;
+            this.deleteRowToolStripMenuItem.Enabled = true;
+            this._access = new Accessor(Global.DataFileName);
+            this._access.Connect(Global.Password);
+            this.DataSource = this.GetAccountList();
+        }
+
+        private DataTable GetAccountList()
+        {
+            DataTable accList = this.InitDataSource();
+            using (Accessor access = new Accessor(Global.DataFileName))
+            {
+                access.Connect(Global.Password);
+                var lst = access.Select(new Condition());
+                foreach (var acc in lst)
+                {
+                    var r = accList.NewRow();
+                    r["Id"] = acc.Id;
+                    r["SiteName"] = acc.SiteName;
+                    r["URL"] = acc.URL;
+                    r["UserName"] = acc.UserName;
+                    r["Password"] = acc.Password;
+                    accList.Rows.Add(r);
+                }
+            }
+            return accList;
+        }
+
+        private DataTable InitDataSource()
+        {
+            DataTable dat = new DataTable();
+            dat.Columns.Add(new DataColumn("Id"));
+            dat.Columns.Add(new DataColumn("SiteName"));
+            dat.Columns.Add(new DataColumn("URL"));
+            dat.Columns.Add(new DataColumn("UserName"));
+            dat.Columns.Add(new DataColumn("Password"));
+            return dat;
         }
 
         private void InitDataGrid()
@@ -178,8 +230,11 @@ namespace BlueFox.AM.UI
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            this._access.Dispose();
-            this._access = null;
+            if (this._access != null)
+            {
+                this._access.Dispose();
+                this._access = null;
+            }
             base.OnClosing(e);
         }
     }
