@@ -25,6 +25,7 @@ namespace BlueFox.AM
                 {
                     AccountListBiz accListBiz = new AccountListBiz();
                     accListBiz.Run();
+                    accListBiz.Dispose();
                 }
             }
             catch (Exception ex)

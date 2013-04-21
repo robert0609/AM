@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using BlueFox.AM.DAO;
+using BlueFox.AM.BL;
 
 namespace BlueFox.AM.UI
 {
@@ -24,69 +25,46 @@ namespace BlueFox.AM.UI
             }
         }
 
-        private Accessor _access;
+        private AccountListBiz _biz;
 
-        public AccountList()
+        private bool _isExitMenuClicked;
+
+        public AccountList(AccountListBiz biz) : base()
         {
             InitializeComponent();
+            this._isExitMenuClicked = false;
+            this._biz = biz;
             this.InitDataGrid();
             this.dgvPrivate.SizeChanged += new EventHandler(dgvPrivate_SizeChanged);
             this.addRowToolStripMenuItem.Click += new EventHandler(addRowToolStripMenuItem_Click);
             this.deleteRowToolStripMenuItem.Click += new EventHandler(deleteRowToolStripMenuItem_Click);
             this.dgvPrivate.CellEndEdit += new DataGridViewCellEventHandler(dgvPrivate_CellEndEdit);
             this.dgvPrivate.CellClick += new DataGridViewCellEventHandler(dgvPrivate_CellClick);
-            //this.RemovableDriveArrived += new DelegateRemovableDriveArrived(AccountList_RemovableDriveArrived);
             this.RemovableDrivePulled += new DelegateRemovableDrivePulled(AccountList_RemovableDrivePulled);
+            this.RemovableDriveArrived += new DelegateRemovableDriveArrived(AccountList_RemovableDriveArrived);
+            this.exitToolStripMenuItem.Click += new EventHandler(exitToolStripMenuItem_Click);
         }
 
-        private void AccountList_RemovableDrivePulled(object sender, RemovableDriveEventArgs e)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this._access.Dispose();
-            this._access = null;
             this.DataSource = null;
-            this.addRowToolStripMenuItem.Enabled = false;
-            this.deleteRowToolStripMenuItem.Enabled = false;
+            this._isExitMenuClicked = true;
+            this.Close();
         }
 
         private void AccountList_RemovableDriveArrived(object sender, RemovableDriveEventArgs e)
         {
             this.addRowToolStripMenuItem.Enabled = true;
             this.deleteRowToolStripMenuItem.Enabled = true;
-            this._access = new Accessor(Global.DataFileName);
-            this._access.Connect(Global.Password);
-            this.DataSource = this.GetAccountList();
+            this._biz.Reconnect();
+            this.DataSource = this._biz.GetAccountList();
         }
 
-        private DataTable GetAccountList()
+        private void AccountList_RemovableDrivePulled(object sender, RemovableDriveEventArgs e)
         {
-            DataTable accList = this.InitDataSource();
-            using (Accessor access = new Accessor(Global.DataFileName))
-            {
-                access.Connect(Global.Password);
-                var lst = access.Select(new Condition());
-                foreach (var acc in lst)
-                {
-                    var r = accList.NewRow();
-                    r["Id"] = acc.Id;
-                    r["SiteName"] = acc.SiteName;
-                    r["URL"] = acc.URL;
-                    r["UserName"] = acc.UserName;
-                    r["Password"] = acc.Password;
-                    accList.Rows.Add(r);
-                }
-            }
-            return accList;
-        }
-
-        private DataTable InitDataSource()
-        {
-            DataTable dat = new DataTable();
-            dat.Columns.Add(new DataColumn("Id"));
-            dat.Columns.Add(new DataColumn("SiteName"));
-            dat.Columns.Add(new DataColumn("URL"));
-            dat.Columns.Add(new DataColumn("UserName"));
-            dat.Columns.Add(new DataColumn("Password"));
-            return dat;
+            this.DataSource = null;
+            this.addRowToolStripMenuItem.Enabled = false;
+            this.deleteRowToolStripMenuItem.Enabled = false;
         }
 
         private void InitDataGrid()
@@ -151,89 +129,103 @@ namespace BlueFox.AM.UI
 
         private void deleteRowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (this.DataSource == null)
+            try
             {
-                return;
-            }
-            IList<string> selIds = new List<string>();
-            foreach (DataGridViewRow row in this.dgvPrivate.SelectedRows)
-            {
-                if (row.Cells["Id"].Value == null || string.IsNullOrEmpty(row.Cells["Id"].Value.ToString()))
+                if (this.DataSource == null)
                 {
-                    continue;
+                    return;
                 }
-                selIds.Add(row.Cells["Id"].Value.ToString());
-            }
-            foreach (var id in selIds)
-            {
-                Account acc = new Account();
-                acc["Id"] = id;
-                this._access.Delete(acc);
-            }
-            IList<DataRow> selRows = new List<DataRow>();
-            foreach (DataRow r in this.DataSource.Rows)
-            {
-                if (selIds.Contains(r["Id"].ToString()))
+                IList<string> selIds = new List<string>();
+                foreach (DataGridViewRow row in this.dgvPrivate.SelectedRows)
                 {
-                    selRows.Add(r);
+                    if (row.Cells["Id"].Value == null || string.IsNullOrEmpty(row.Cells["Id"].Value.ToString()))
+                    {
+                        continue;
+                    }
+                    selIds.Add(row.Cells["Id"].Value.ToString());
+                }
+                this._biz.DeleteAccount(selIds);
+                IList<DataRow> selRows = new List<DataRow>();
+                foreach (DataRow r in this.DataSource.Rows)
+                {
+                    if (selIds.Contains(r["Id"].ToString()))
+                    {
+                        selRows.Add(r);
+                    }
+                }
+                foreach (var r in selRows)
+                {
+                    this.DataSource.Rows.Remove(r);
                 }
             }
-            foreach (var r in selRows)
+            catch (Exception ex)
             {
-                this.DataSource.Rows.Remove(r);
+                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void dgvPrivate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            var name = this.dgvPrivate.Columns[e.ColumnIndex].DataPropertyName;
-            var row = this.DataSource.Rows[e.RowIndex];
-            Account acc = new Account();
-            acc[name] = row[name].ToString();
-            if (row["Id"] == null || string.IsNullOrEmpty(row["Id"].ToString()))
+            try
             {
-                row["Id"] = this._access.Insert(acc);
+                var name = this.dgvPrivate.Columns[e.ColumnIndex].DataPropertyName;
+                var row = this.DataSource.Rows[e.RowIndex];
+                Account acc = new Account();
+                acc[name] = row[name].ToString();
+                if (row["Id"] == null || string.IsNullOrEmpty(row["Id"].ToString()))
+                {
+                    row["Id"] = this._biz.InsertAccount(acc);
+                }
+                else
+                {
+                    acc["Id"] = row["id"].ToString();
+                    this._biz.UpdateAccount(acc);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                acc["Id"] = row["id"].ToString();
-                this._access.Update(acc);
+                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         private void dgvPrivate_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            var name = this.dgvPrivate.Columns[e.ColumnIndex].DataPropertyName;
-            if (name == "CopyUserName" || name == "CopyPassword")
+            try
             {
-                if (e.RowIndex > -1)
+                var name = this.dgvPrivate.Columns[e.ColumnIndex].DataPropertyName;
+                if (name == "CopyUserName" || name == "CopyPassword")
                 {
-                    var fieldName = this.dgvPrivate.Columns[e.ColumnIndex - 1].DataPropertyName;
-                    var objCell = this.DataSource.Rows[e.RowIndex][fieldName];
-                    if (objCell != null)
+                    if (e.RowIndex > -1)
                     {
-                        Clipboard.Clear();
-                        Clipboard.SetText(objCell.ToString());
-                        //MessageBox.Show(string.Format("{0} has been copied to clipboard.", fieldName), "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        var fieldName = this.dgvPrivate.Columns[e.ColumnIndex - 1].DataPropertyName;
+                        var objCell = this.DataSource.Rows[e.RowIndex][fieldName];
+                        if (objCell != null)
+                        {
+                            Clipboard.Clear();
+                            Clipboard.SetText(objCell.ToString());
+                            //MessageBox.Show(string.Format("{0} has been copied to clipboard.", fieldName), "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
         protected override void OnLoad(EventArgs e)
         {
             this.Text += Global.UserName;
-            this._access = new Accessor(Global.DataFileName);
-            this._access.Connect(Global.Password);
             base.OnLoad(e);
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (this._access != null)
+            if (!this._isExitMenuClicked)
             {
-                this._access.Dispose();
-                this._access = null;
+                e.Cancel = true;
+                this.WindowState = FormWindowState.Minimized;
             }
             base.OnClosing(e);
         }

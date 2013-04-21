@@ -33,6 +33,7 @@
             this.dgvPrivate = new System.Windows.Forms.DataGridView();
             this.menuAccList = new System.Windows.Forms.MenuStrip();
             this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addRowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteRowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tcAccountList.SuspendLayout();
@@ -83,31 +84,40 @@
             // menuAccList
             // 
             this.menuAccList.BackColor = System.Drawing.Color.Transparent;
+            this.menuAccList.Font = new System.Drawing.Font("Lucida Console", 9F);
             this.menuAccList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.userToolStripMenuItem,
             this.addRowToolStripMenuItem,
             this.deleteRowToolStripMenuItem});
             this.menuAccList.Location = new System.Drawing.Point(0, 0);
             this.menuAccList.Name = "menuAccList";
-            this.menuAccList.Size = new System.Drawing.Size(792, 25);
+            this.menuAccList.Size = new System.Drawing.Size(792, 24);
             this.menuAccList.TabIndex = 1;
             // 
             // userToolStripMenuItem
             // 
+            this.userToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
             this.userToolStripMenuItem.Name = "userToolStripMenuItem";
-            this.userToolStripMenuItem.Size = new System.Drawing.Size(47, 21);
+            this.userToolStripMenuItem.Size = new System.Drawing.Size(45, 20);
             this.userToolStripMenuItem.Text = "User";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
             // 
             // addRowToolStripMenuItem
             // 
             this.addRowToolStripMenuItem.Name = "addRowToolStripMenuItem";
-            this.addRowToolStripMenuItem.Size = new System.Drawing.Size(69, 21);
+            this.addRowToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.addRowToolStripMenuItem.Text = "AddRow";
             // 
             // deleteRowToolStripMenuItem
             // 
             this.deleteRowToolStripMenuItem.Name = "deleteRowToolStripMenuItem";
-            this.deleteRowToolStripMenuItem.Size = new System.Drawing.Size(82, 21);
+            this.deleteRowToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
             this.deleteRowToolStripMenuItem.Text = "DeleteRow";
             // 
             // AccountList
@@ -119,6 +129,7 @@
             this.Controls.Add(this.tcAccountList);
             this.Controls.Add(this.menuAccList);
             this.MainMenuStrip = this.menuAccList;
+            this.MinimumSize = new System.Drawing.Size(400, 300);
             this.Name = "AccountList";
             this.Text = "Account List-";
             this.tcAccountList.ResumeLayout(false);
@@ -140,6 +151,7 @@
         private System.Windows.Forms.DataGridView dgvPrivate;
         private System.Windows.Forms.ToolStripMenuItem addRowToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteRowToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
 
 
     }

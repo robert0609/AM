@@ -9,7 +9,7 @@ using System.Data;
 
 namespace BlueFox.AM.BL
 {
-    public class AccountListBiz
+    public class AccountListBiz : IDisposable
     {
         public AccountList View
         {
@@ -17,9 +17,18 @@ namespace BlueFox.AM.BL
             private set;
         }
 
+        private Accessor _access;
+
         public AccountListBiz()
         {
-            this.View = new AccountList();
+            this.View = new AccountList(this);
+            this._access = new Accessor(Global.DataFileName);
+            this._access.Connect(Global.Password);
+        }
+
+        public void Reconnect()
+        {
+            this._access.Connect(Global.Password);
         }
 
         public void Run()
@@ -27,26 +36,21 @@ namespace BlueFox.AM.BL
             var dat = this.GetAccountList();
             this.View.DataSource = dat;
             this.View.ShowDialog();
-            //Application.Run(this.View);
         }
 
-        private DataTable GetAccountList()
+        public DataTable GetAccountList()
         {
             DataTable accList = this.InitDataSource();
-            using (Accessor access = new Accessor(Global.DataFileName))
+            var lst = this._access.Select(new Condition());
+            foreach (var acc in lst)
             {
-                access.Connect(Global.Password);
-                var lst = access.Select(new Condition());
-                foreach (var acc in lst)
-                {
-                    var r = accList.NewRow();
-                    r["Id"] = acc.Id;
-                    r["SiteName"] = acc.SiteName;
-                    r["URL"] = acc.URL;
-                    r["UserName"] = acc.UserName;
-                    r["Password"] = acc.Password;
-                    accList.Rows.Add(r);
-                }
+                var r = accList.NewRow();
+                r["Id"] = acc.Id;
+                r["SiteName"] = acc.SiteName;
+                r["URL"] = acc.URL;
+                r["UserName"] = acc.UserName;
+                r["Password"] = acc.Password;
+                accList.Rows.Add(r);
             }
             return accList;
         }
@@ -60,6 +64,35 @@ namespace BlueFox.AM.BL
             dat.Columns.Add(new DataColumn("UserName"));
             dat.Columns.Add(new DataColumn("Password"));
             return dat;
+        }
+
+        public void DeleteAccount(IList<string> idList)
+        {
+            foreach (var id in idList)
+            {
+                Account acc = new Account();
+                acc["Id"] = id;
+                this._access.Delete(acc);
+            }
+        }
+
+        public string InsertAccount(Account acc)
+        {
+            return this._access.Insert(acc);
+        }
+
+        public void UpdateAccount(Account acc)
+        {
+            this._access.Update(acc);
+        }
+
+        public void Dispose()
+        {
+            if (this._access != null)
+            {
+                this._access.Dispose();
+                this._access = null;
+            }
         }
     }
 }
