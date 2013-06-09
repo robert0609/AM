@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Data.SQLite;
+using BlueFox.Security;
 
 namespace BlueFox.AM.DAO
 {
@@ -46,14 +47,20 @@ namespace BlueFox.AM.DAO
                 var dataReader = cmd.ExecuteReader();
                 while (dataReader.Read())
                 {
-                    var acc = new Account 
-                    { 
-                        Id = dataReader["Id"].ToString(),
-                        SiteName = dataReader["SiteName"].ToString(),
-                        URL = dataReader["URL"].ToString(),
-                        UserName = dataReader["UserName"].ToString(),
-                        Password = dataReader["Password"].ToString() 
-                    };
+                    var acc = new Account();
+                    acc.Id = dataReader["Id"].ToString();
+                    acc.SiteName = dataReader["SiteName"].ToString();
+                    acc.URL = dataReader["URL"].ToString();
+                    if (Global.Encoder == null)
+                    {
+                        acc.UserName = dataReader["UserName"].ToString();
+                        acc.Password = dataReader["Password"].ToString();
+                    }
+                    else
+                    {
+                        acc.UserName = Global.Encoder.Decrypt(dataReader["UserName"].ToString());
+                        acc.Password = Global.Encoder.Decrypt(dataReader["Password"].ToString());
+                    }
                     ret.Add(acc);
                 }
             }

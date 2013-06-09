@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BlueFox.Security;
 
 namespace BlueFox.AM
 {
@@ -34,9 +35,16 @@ namespace BlueFox.AM
             private set;
         }
 
+        public static DES Encoder
+        {
+            get;
+            private set;
+        }
+
         static Global()
         {
             BaseDir = AppDomain.CurrentDomain.BaseDirectory;
+            Encoder = new DES("sf7gh8hj");
         }
     }
 }

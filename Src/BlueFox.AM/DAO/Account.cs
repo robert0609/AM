@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using BlueFox.Security;
 
 namespace BlueFox.AM.DAO
 {
@@ -118,7 +119,14 @@ namespace BlueFox.AM.DAO
             }
             else
             {
-                sb.Append(string.Format(INSERT_VALUE, this.UserName));
+                if (Global.Encoder == null)
+                {
+                    sb.Append(string.Format(INSERT_VALUE, this.UserName));
+                }
+                else
+                {
+                    sb.Append(string.Format(INSERT_VALUE, Global.Encoder.Encrypt(this.UserName)));
+                }
             }
             sb.Append(',');
             if (string.IsNullOrEmpty(this.Password))
@@ -127,7 +135,14 @@ namespace BlueFox.AM.DAO
             }
             else
             {
-                sb.Append(string.Format(INSERT_VALUE, this.Password));
+                if (Global.Encoder == null)
+                {
+                    sb.Append(string.Format(INSERT_VALUE, this.Password));
+                }
+                else
+                {
+                    sb.Append(string.Format(INSERT_VALUE, Global.Encoder.Encrypt(this.Password)));
+                }
             }
             return sb.ToString();
         }
@@ -153,12 +168,26 @@ namespace BlueFox.AM.DAO
             if (!string.IsNullOrEmpty(this.UserName))
             {
                 sb.Append(',');
-                sb.Append(string.Format(UPDATE_SET, "UserName", this.UserName));
+                if (Global.Encoder == null)
+                {
+                    sb.Append(string.Format(UPDATE_SET, "UserName", this.UserName));
+                }
+                else
+                {
+                    sb.Append(string.Format(UPDATE_SET, "UserName", Global.Encoder.Encrypt(this.UserName)));
+                }
             }
             if (!string.IsNullOrEmpty(this.Password))
             {
                 sb.Append(',');
-                sb.Append(string.Format(UPDATE_SET, "Password", this.Password));
+                if (Global.Encoder == null)
+                {
+                    sb.Append(string.Format(UPDATE_SET, "Password", this.Password));
+                }
+                else
+                {
+                    sb.Append(string.Format(UPDATE_SET, "Password", Global.Encoder.Encrypt(this.Password)));
+                }
             }
             return sb.ToString();
         }
