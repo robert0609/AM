@@ -17,11 +17,11 @@ namespace BlueFox.AM.UI
         {
             get
             {
-                return this.dgvPrivate.DataSource as DataTable;
+                return this.dgvLevel0.DataSource as DataTable;
             }
             set
             {
-                this.dgvPrivate.DataSource = value;
+                this.dgvLevel0.DataSource = value;
             }
         }
 
@@ -35,11 +35,11 @@ namespace BlueFox.AM.UI
             this._isExitMenuClicked = false;
             this._biz = biz;
             this.InitDataGrid();
-            this.dgvPrivate.SizeChanged += new EventHandler(dgvPrivate_SizeChanged);
+            this.dgvLevel0.SizeChanged += new EventHandler(dgvPrivate_SizeChanged);
             this.addRowToolStripMenuItem.Click += new EventHandler(addRowToolStripMenuItem_Click);
             this.deleteRowToolStripMenuItem.Click += new EventHandler(deleteRowToolStripMenuItem_Click);
-            this.dgvPrivate.CellEndEdit += new DataGridViewCellEventHandler(dgvPrivate_CellEndEdit);
-            this.dgvPrivate.CellClick += new DataGridViewCellEventHandler(dgvPrivate_CellClick);
+            this.dgvLevel0.CellEndEdit += new DataGridViewCellEventHandler(dgvPrivate_CellEndEdit);
+            this.dgvLevel0.CellClick += new DataGridViewCellEventHandler(dgvPrivate_CellClick);
             this.RemovableDrivePulled += new DelegateRemovableDrivePulled(AccountList_RemovableDrivePulled);
             this.RemovableDriveArrived += new DelegateRemovableDriveArrived(AccountList_RemovableDriveArrived);
             this.exitToolStripMenuItem.Click += new EventHandler(exitToolStripMenuItem_Click);
@@ -69,23 +69,23 @@ namespace BlueFox.AM.UI
 
         private void InitDataGrid()
         {
-            this.dgvPrivate.AutoGenerateColumns = false;
-            this.dgvPrivate.RowHeadersVisible = false;
-            this.dgvPrivate.AlternatingRowsDefaultCellStyle.BackColor = SystemColors.InactiveCaption;
-            this.dgvPrivate.ScrollBars = ScrollBars.Both;
-            this.dgvPrivate.AllowUserToResizeRows = false;
-            this.dgvPrivate.AllowUserToResizeColumns = false;
-            this.dgvPrivate.AllowUserToAddRows = false;
-            this.dgvPrivate.AllowUserToDeleteRows = false;
-            this.dgvPrivate.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            this.dgvLevel0.AutoGenerateColumns = false;
+            this.dgvLevel0.RowHeadersVisible = false;
+            this.dgvLevel0.AlternatingRowsDefaultCellStyle.BackColor = SystemColors.InactiveCaption;
+            this.dgvLevel0.ScrollBars = ScrollBars.Both;
+            this.dgvLevel0.AllowUserToResizeRows = false;
+            this.dgvLevel0.AllowUserToResizeColumns = false;
+            this.dgvLevel0.AllowUserToAddRows = false;
+            this.dgvLevel0.AllowUserToDeleteRows = false;
+            this.dgvLevel0.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            this.dgvPrivate.Columns.Add(this.GenerateColumn("Id", 150, false));
-            this.dgvPrivate.Columns.Add(this.GenerateColumn("SiteName", 100, true));
-            this.dgvPrivate.Columns.Add(this.GenerateColumn("URL", this.dgvPrivate.Width - 470, true));
-            this.dgvPrivate.Columns.Add(this.GenerateColumn("UserName", 150, true));
-            this.dgvPrivate.Columns.Add(this.GenerateButtonColumn("CopyUserName", 25));
-            this.dgvPrivate.Columns.Add(this.GenerateColumn("Password", 150, true));
-            this.dgvPrivate.Columns.Add(this.GenerateButtonColumn("CopyPassword", 25));
+            this.dgvLevel0.Columns.Add(this.GenerateColumn("Id", 150, false));
+            this.dgvLevel0.Columns.Add(this.GenerateColumn("SiteName", 100, true));
+            this.dgvLevel0.Columns.Add(this.GenerateColumn("URL", this.dgvLevel0.Width - 470, true));
+            this.dgvLevel0.Columns.Add(this.GenerateColumn("UserName", 150, true));
+            this.dgvLevel0.Columns.Add(this.GenerateButtonColumn("CopyUserName", 25));
+            this.dgvLevel0.Columns.Add(this.GenerateColumn("Password", 150, true));
+            this.dgvLevel0.Columns.Add(this.GenerateButtonColumn("CopyPassword", 25));
         }
 
         private DataGridViewColumn GenerateColumn(string name, int width, bool display)
@@ -115,7 +115,7 @@ namespace BlueFox.AM.UI
         private void dgvPrivate_SizeChanged(object sender, EventArgs e)
         {
             DataGridView grid = sender as DataGridView;
-            grid.Columns["URL"].Width = this.dgvPrivate.Width - 470;
+            grid.Columns["URL"].Width = this.dgvLevel0.Width - 470;
         }
 
         private void addRowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -136,7 +136,7 @@ namespace BlueFox.AM.UI
                     return;
                 }
                 IList<string> selIds = new List<string>();
-                foreach (DataGridViewRow row in this.dgvPrivate.SelectedRows)
+                foreach (DataGridViewRow row in this.dgvLevel0.SelectedRows)
                 {
                     if (row.Cells["Id"].Value == null || string.IsNullOrEmpty(row.Cells["Id"].Value.ToString()))
                     {
@@ -168,7 +168,7 @@ namespace BlueFox.AM.UI
         {
             try
             {
-                var name = this.dgvPrivate.Columns[e.ColumnIndex].DataPropertyName;
+                var name = this.dgvLevel0.Columns[e.ColumnIndex].DataPropertyName;
                 var row = this.DataSource.Rows[e.RowIndex];
                 Account acc = new Account();
                 acc[name] = row[name].ToString();
@@ -192,12 +192,12 @@ namespace BlueFox.AM.UI
         {
             try
             {
-                var name = this.dgvPrivate.Columns[e.ColumnIndex].DataPropertyName;
+                var name = this.dgvLevel0.Columns[e.ColumnIndex].DataPropertyName;
                 if (name == "CopyUserName" || name == "CopyPassword")
                 {
                     if (e.RowIndex > -1)
                     {
-                        var fieldName = this.dgvPrivate.Columns[e.ColumnIndex - 1].DataPropertyName;
+                        var fieldName = this.dgvLevel0.Columns[e.ColumnIndex - 1].DataPropertyName;
                         var objCell = this.DataSource.Rows[e.RowIndex][fieldName];
                         if (objCell != null)
                         {
