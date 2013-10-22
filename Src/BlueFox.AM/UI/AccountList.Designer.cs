@@ -30,20 +30,20 @@
         {
             this.tcAccountList = new System.Windows.Forms.TabControl();
             this.tpPrivate = new System.Windows.Forms.TabPage();
+            this.tcLevels = new System.Windows.Forms.TabControl();
+            this.tpLevel0 = new System.Windows.Forms.TabPage();
             this.dgvLevel0 = new System.Windows.Forms.DataGridView();
             this.menuAccList = new System.Windows.Forms.MenuStrip();
             this.userToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addRowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteRowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tcLevels = new System.Windows.Forms.TabControl();
-            this.tpLevel0 = new System.Windows.Forms.TabPage();
             this.tcAccountList.SuspendLayout();
             this.tpPrivate.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLevel0)).BeginInit();
-            this.menuAccList.SuspendLayout();
             this.tcLevels.SuspendLayout();
             this.tpLevel0.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvLevel0)).BeginInit();
+            this.menuAccList.SuspendLayout();
             this.SuspendLayout();
             // 
             // tcAccountList
@@ -73,6 +73,31 @@
             this.tpPrivate.Text = "Private";
             this.tpPrivate.UseVisualStyleBackColor = true;
             // 
+            // tcLevels
+            // 
+            this.tcLevels.Alignment = System.Windows.Forms.TabAlignment.Bottom;
+            this.tcLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.tcLevels.Controls.Add(this.tpLevel0);
+            this.tcLevels.Location = new System.Drawing.Point(0, 0);
+            this.tcLevels.Multiline = true;
+            this.tcLevels.Name = "tcLevels";
+            this.tcLevels.SelectedIndex = 0;
+            this.tcLevels.Size = new System.Drawing.Size(784, 517);
+            this.tcLevels.TabIndex = 1;
+            // 
+            // tpLevel0
+            // 
+            this.tpLevel0.Controls.Add(this.dgvLevel0);
+            this.tpLevel0.Location = new System.Drawing.Point(4, 4);
+            this.tpLevel0.Name = "tpLevel0";
+            this.tpLevel0.Padding = new System.Windows.Forms.Padding(3);
+            this.tpLevel0.Size = new System.Drawing.Size(776, 492);
+            this.tpLevel0.TabIndex = 0;
+            this.tpLevel0.Text = "Level-0";
+            this.tpLevel0.UseVisualStyleBackColor = true;
+            // 
             // dgvLevel0
             // 
             this.dgvLevel0.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
@@ -82,7 +107,7 @@
             this.dgvLevel0.Location = new System.Drawing.Point(0, 0);
             this.dgvLevel0.Name = "dgvLevel0";
             this.dgvLevel0.RowTemplate.Height = 23;
-            this.dgvLevel0.Size = new System.Drawing.Size(758, 509);
+            this.dgvLevel0.Size = new System.Drawing.Size(776, 492);
             this.dgvLevel0.TabIndex = 0;
             // 
             // menuAccList
@@ -109,7 +134,7 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // addRowToolStripMenuItem
@@ -123,31 +148,6 @@
             this.deleteRowToolStripMenuItem.Name = "deleteRowToolStripMenuItem";
             this.deleteRowToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
             this.deleteRowToolStripMenuItem.Text = "DeleteRow";
-            // 
-            // tcLevels
-            // 
-            this.tcLevels.Alignment = System.Windows.Forms.TabAlignment.Left;
-            this.tcLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.tcLevels.Controls.Add(this.tpLevel0);
-            this.tcLevels.Location = new System.Drawing.Point(0, 0);
-            this.tcLevels.Multiline = true;
-            this.tcLevels.Name = "tcLevels";
-            this.tcLevels.SelectedIndex = 0;
-            this.tcLevels.Size = new System.Drawing.Size(784, 517);
-            this.tcLevels.TabIndex = 1;
-            // 
-            // tpLevel0
-            // 
-            this.tpLevel0.Controls.Add(this.dgvLevel0);
-            this.tpLevel0.Location = new System.Drawing.Point(22, 4);
-            this.tpLevel0.Name = "tpLevel0";
-            this.tpLevel0.Padding = new System.Windows.Forms.Padding(3);
-            this.tpLevel0.Size = new System.Drawing.Size(758, 509);
-            this.tpLevel0.TabIndex = 0;
-            this.tpLevel0.Text = "Level-0";
-            this.tpLevel0.UseVisualStyleBackColor = true;
             // 
             // AccountList
             // 
@@ -163,11 +163,11 @@
             this.Text = "Account List-";
             this.tcAccountList.ResumeLayout(false);
             this.tpPrivate.ResumeLayout(false);
+            this.tcLevels.ResumeLayout(false);
+            this.tpLevel0.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvLevel0)).EndInit();
             this.menuAccList.ResumeLayout(false);
             this.menuAccList.PerformLayout();
-            this.tcLevels.ResumeLayout(false);
-            this.tpLevel0.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

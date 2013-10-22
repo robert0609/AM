@@ -5,6 +5,7 @@ using System.Text;
 using System.IO;
 using System.Data.SQLite;
 using BlueFox.Security;
+using System.Data;
 
 namespace BlueFox.AM.DAO
 {
@@ -38,67 +39,79 @@ namespace BlueFox.AM.DAO
             }
         }
 
-        public IList<Account> Select(Condition condition)
+        public IList<Group> Load()
         {
-            IList<Account> ret = new List<Account>();
+            IList<Group> ret = new List<Group>();
             using (SQLiteCommand cmd = new SQLiteCommand(this._con))
             {
-                cmd.CommandText = string.Format("Select * from Account {0} order by SiteName", condition.ToWhereString());
+                cmd.CommandText = "Select g.rowid, g.Id as GroupId, g.GroupName, s.Id as SiteId, s.SiteName, u.Id as UrlId, u.UrlString, a.Id as AccId, a.UserName, a.Password from Group g left join Site s on g.Id = s.GroupId left join Url u on s.Id = u.SiteId left join Accout a on s.Id = a.SiteId order by g.rowid, s.SiteName";
+                #region test
+                //DataTable dat = new DataTable();
+                //SQLiteDataAdapter ada = new SQLiteDataAdapter(cmd);
+                //var cnt = ada.Fill(dat);
+                #endregion
                 var dataReader = cmd.ExecuteReader();
                 while (dataReader.Read())
                 {
-                    var acc = new Account();
-                    acc.Id = dataReader["Id"].ToString();
-                    acc.SiteName = dataReader["SiteName"].ToString();
-                    acc.URL = dataReader["URL"].ToString();
-                    if (Global.Encoder == null)
+                    var grpId = dataReader["GroupId"].ToString();
+                    var grp = (from loop in ret where loop.Id == grpId select loop).FirstOrDefault();
+                    if (grp == null)
                     {
-                        acc.UserName = dataReader["UserName"].ToString();
-                        acc.Password = dataReader["Password"].ToString();
+                        grp = new Group(grpId, dataReader["GroupName"].ToString());
+                        ret.Add(grp);
                     }
-                    else
+                    var siteId = dataReader["SiteId"].ToString();
+                    var site = (from loop in grp.SiteList where loop.Id == siteId select loop).FirstOrDefault();
+                    if (site == null)
                     {
-                        acc.UserName = Global.Encoder.Decrypt(dataReader["UserName"].ToString());
-                        acc.Password = Global.Encoder.Decrypt(dataReader["Password"].ToString());
+                        site = new Site(siteId, dataReader["SiteName"].ToString());
+                        grp.SiteList.Add(site);
                     }
-                    ret.Add(acc);
+                    if (dataReader["UrlId"] != null && dataReader["UrlId"] != DBNull.Value && !string.IsNullOrEmpty(dataReader["UrlId"].ToString()))
+                    {
+                        var urlId = dataReader["UrlId"].ToString();
+                        var url = (from loop in site.UrlList where loop.Id == urlId select loop).FirstOrDefault();
+                        if (url == null)
+                        {
+                            url = new Url(urlId, dataReader["UrlString"].ToString());
+                            site.UrlList.Add(url);
+                        }
+                    }
+                    if (dataReader["AccId"] != null && dataReader["AccId"] != DBNull.Value && !string.IsNullOrEmpty(dataReader["AccId"].ToString()))
+                    {
+                        var accId = dataReader["AccId"].ToString();
+                        var acc = (from loop in site.AccountList where loop.Id == accId select loop).FirstOrDefault();
+                        if (acc == null)
+                        {
+                            acc = new Account(accId, dataReader["UserName"].ToString(), dataReader["Password"].ToString());
+                            site.AccountList.Add(acc);
+                        }
+                    }
                 }
             }
             return ret;
         }
 
-        public string Insert(Account account)
+        public void ExecuteUID(string cmdString)
         {
-            string ret = string.Empty;
-            using (SQLiteCommand cmd = new SQLiteCommand(this._con))
+            SQLiteTransaction tran = this._con.BeginTransaction();
+            SQLiteCommand cmd = new SQLiteCommand(this._con);
+            try
             {
-                cmd.CommandText = string.Format("Insert into Account values({0})", account.ToValueString());
+                cmd.CommandText = cmdString;
                 cmd.ExecuteNonQuery();
-                ret = account.Id;
+                tran.Commit();
             }
-            return ret;
-        }
-
-        public int Update(Account account)
-        {
-            int ret = 0;
-            using (SQLiteCommand cmd = new SQLiteCommand(this._con))
+            catch
             {
-                cmd.CommandText = string.Format("Update Account Set {0} where Id = '{1}'", account.ToSetString(), account.Id);
-                ret = cmd.ExecuteNonQuery();
+                tran.Rollback();
+                throw;
             }
-            return ret;
-        }
-
-        public int Delete(Account account)
-        {
-            int ret = 0;
-            using (SQLiteCommand cmd = new SQLiteCommand(this._con))
+            finally
             {
-                cmd.CommandText = string.Format("Delete from Account where Id = '{0}'", account.Id);
-                ret = cmd.ExecuteNonQuery();
+                cmd.Dispose();
+                tran.Dispose();
             }
-            return ret;
         }
 
         public void Dispose()

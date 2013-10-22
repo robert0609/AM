@@ -54,7 +54,12 @@
     <Compile Include="BL\LoginBiz.cs" />
     <Compile Include="DAO\Accessor.cs" />
     <Compile Include="DAO\Account.cs" />
+    <Compile Include="DAO\Entity.cs" />
+    <Compile Include="DAO\EnumStatus.cs" />
+    <Compile Include="DAO\Group.cs" />
+    <Compile Include="DAO\Site.cs" />
     <Compile Include="DAO\Condition.cs" />
+    <Compile Include="DAO\Url.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

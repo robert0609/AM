@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BlueFox.AM.DAO
 {
-    public class Account : Entity
+    public class Url : Entity
     {
         public string Id
         {
@@ -13,40 +13,21 @@ namespace BlueFox.AM.DAO
             private set;
         }
 
-        private bool _userNameChanged;
-        private string _userName;
-        public string UserName
+        private bool _urlStringChanged;
+        private string _urlString;
+        public string UrlString
         {
             get
             {
-                return this._userName;
+                return this._urlString;
             }
             set
             {
-                if (value != this._userName)
+                if (value != this._urlString)
                 {
                     this.ModifiedProperty();
-                    this._userName = value;
-                    this._userNameChanged = true;
-                }
-            }
-        }
-
-        private bool _passwordChanged;
-        private string _password;
-        public string Password
-        {
-            get
-            {
-                return this._password;
-            }
-            set
-            {
-                if (value != this._password)
-                {
-                    this.ModifiedProperty();
-                    this._password = value;
-                    this._passwordChanged = true;
+                    this._urlString = value;
+                    this._urlStringChanged = true;
                 }
             }
         }
@@ -70,34 +51,30 @@ namespace BlueFox.AM.DAO
             }
         }
 
-        public Account(string siteId)
+        public Url(string siteId)
         {
             this.Id = Guid.NewGuid().ToString();
-            this._userName = string.Empty;
-            this._password = string.Empty;
+            this._urlString = string.Empty;
             this._siteId = siteId;
             this.Status = DataStatus.New;
         }
 
-        public Account(string id, string userName, string password, string siteId)
+        public Url(string id, string urlString, string siteId)
         {
             this.Id = id;
-            this._userName = userName;
-            this._password = password;
+            this._urlString = urlString;
             this._siteId = siteId;
             this.Status = DataStatus.NoChanged;
         }
 
         protected override string GenInsertString()
         {
-            StringBuilder sb = new StringBuilder("Insert into Account(Id, SiteId, UserName, Password) values(");
+            StringBuilder sb = new StringBuilder("Insert into Url(Id, SiteId, UrlString) values(");
             sb.Append(string.Format(INSERT_VALUE, this.Id));
             sb.Append(",");
             sb.Append(string.Format(INSERT_VALUE, this._siteId));
             sb.Append(",");
-            sb.Append(string.Format(INSERT_VALUE, this._userName));
-            sb.Append(",");
-            sb.Append(string.Format(INSERT_VALUE, this._password));
+            sb.Append(string.Format(INSERT_VALUE, this._urlString));
             sb.Append(")");
 
             return sb.ToString();
@@ -105,20 +82,15 @@ namespace BlueFox.AM.DAO
 
         protected override string GenUpdateString()
         {
-            StringBuilder sb = new StringBuilder("Update Account Set ");
+            StringBuilder sb = new StringBuilder("Update Url Set ");
             if (this._siteIdChanged)
             {
                 sb.Append(string.Format(UPDATE_SET, "SiteId", this._siteId));
                 sb.Append(",");
             }
-            if (this._userNameChanged)
+            if (this._urlStringChanged)
             {
-                sb.Append(string.Format(UPDATE_SET, "UserName", this._userName));
-                sb.Append(",");
-            }
-            if (this._passwordChanged)
-            {
-                sb.Append(string.Format(UPDATE_SET, "Password", this._password));
+                sb.Append(string.Format(UPDATE_SET, "UrlString", this._urlString));
                 sb.Append(",");
             }
             sb.Remove(sb.Length - 1, 1);
@@ -130,7 +102,7 @@ namespace BlueFox.AM.DAO
 
         protected override string GenDeleteString()
         {
-            StringBuilder sb = new StringBuilder("Delete from Account Where ");
+            StringBuilder sb = new StringBuilder("Delete from Url Where ");
             sb.Append(string.Format(WHERE, "Id", this.Id));
 
             return sb.ToString();

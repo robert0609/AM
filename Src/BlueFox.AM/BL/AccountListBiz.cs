@@ -70,18 +70,18 @@ namespace BlueFox.AM.BL
         {
             foreach (var id in idList)
             {
-                Account acc = new Account();
+                Site acc = new Site();
                 acc["Id"] = id;
                 this._access.Delete(acc);
             }
         }
 
-        public string InsertAccount(Account acc)
+        public string InsertAccount(Site acc)
         {
             return this._access.Insert(acc);
         }
 
-        public void UpdateAccount(Account acc)
+        public void UpdateAccount(Site acc)
         {
             this._access.Update(acc);
         }

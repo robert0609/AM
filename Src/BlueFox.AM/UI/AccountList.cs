@@ -35,11 +35,11 @@ namespace BlueFox.AM.UI
             this._isExitMenuClicked = false;
             this._biz = biz;
             this.InitDataGrid();
-            this.dgvLevel0.SizeChanged += new EventHandler(dgvPrivate_SizeChanged);
+            this.dgvLevel0.SizeChanged += new EventHandler(Grid_SizeChanged);
             this.addRowToolStripMenuItem.Click += new EventHandler(addRowToolStripMenuItem_Click);
             this.deleteRowToolStripMenuItem.Click += new EventHandler(deleteRowToolStripMenuItem_Click);
-            this.dgvLevel0.CellEndEdit += new DataGridViewCellEventHandler(dgvPrivate_CellEndEdit);
-            this.dgvLevel0.CellClick += new DataGridViewCellEventHandler(dgvPrivate_CellClick);
+            this.dgvLevel0.CellEndEdit += new DataGridViewCellEventHandler(Grid_CellEndEdit);
+            this.dgvLevel0.CellClick += new DataGridViewCellEventHandler(Grid_CellClick);
             this.RemovableDrivePulled += new DelegateRemovableDrivePulled(AccountList_RemovableDrivePulled);
             this.RemovableDriveArrived += new DelegateRemovableDriveArrived(AccountList_RemovableDriveArrived);
             this.exitToolStripMenuItem.Click += new EventHandler(exitToolStripMenuItem_Click);
@@ -112,10 +112,10 @@ namespace BlueFox.AM.UI
             return col;
         }
 
-        private void dgvPrivate_SizeChanged(object sender, EventArgs e)
+        private void Grid_SizeChanged(object sender, EventArgs e)
         {
             DataGridView grid = sender as DataGridView;
-            grid.Columns["URL"].Width = this.dgvLevel0.Width - 470;
+            grid.Columns["URL"].Width = grid.Width - 470;
         }
 
         private void addRowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -164,13 +164,13 @@ namespace BlueFox.AM.UI
             }
         }
 
-        private void dgvPrivate_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void Grid_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
                 var name = this.dgvLevel0.Columns[e.ColumnIndex].DataPropertyName;
                 var row = this.DataSource.Rows[e.RowIndex];
-                Account acc = new Account();
+                Site acc = new Site();
                 acc[name] = row[name].ToString();
                 if (row["Id"] == null || string.IsNullOrEmpty(row["Id"].ToString()))
                 {
@@ -188,7 +188,7 @@ namespace BlueFox.AM.UI
             }
         }
 
-        private void dgvPrivate_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void Grid_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
