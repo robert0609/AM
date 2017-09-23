@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BlueFox.AM.DAO
 {
-    public class Group : Entity
+    public class SiteGroup : Entity
     {
         public string Id
         {
@@ -38,16 +38,21 @@ namespace BlueFox.AM.DAO
             set;
         }
 
-        public Group()
+        public SiteGroup() : this(Guid.NewGuid().ToString())
         {
-            this.Id = Guid.NewGuid().ToString();
+
+        }
+
+        public SiteGroup(string id)
+        {
+            this.Id = id;
             this._groupName = string.Empty;
             this.Status = DataStatus.New;
 
             this.SiteList = new List<Site>();
         }
 
-        public Group(string id, string groupName)
+        public SiteGroup(string id, string groupName)
         {
             this.Id = id;
             this._groupName = groupName;
@@ -58,7 +63,7 @@ namespace BlueFox.AM.DAO
 
         protected override string GenInsertString()
         {
-            StringBuilder sb = new StringBuilder("Insert into Group(Id, GroupName) values(");
+            StringBuilder sb = new StringBuilder("Insert into SiteGroup(Id, GroupName) values(");
             sb.Append(string.Format(INSERT_VALUE, this.Id));
             sb.Append(",");
             sb.Append(string.Format(INSERT_VALUE, this._groupName));
@@ -69,7 +74,7 @@ namespace BlueFox.AM.DAO
 
         protected override string GenUpdateString()
         {
-            StringBuilder sb = new StringBuilder("Update Group Set ");
+            StringBuilder sb = new StringBuilder("Update SiteGroup Set ");
             if (this._groupNameChanged)
             {
                 sb.Append(string.Format(UPDATE_SET, "GroupName", this._groupName));
@@ -84,7 +89,7 @@ namespace BlueFox.AM.DAO
 
         protected override string GenDeleteString()
         {
-            StringBuilder sb = new StringBuilder("Delete from Group Where ");
+            StringBuilder sb = new StringBuilder("Delete from SiteGroup Where ");
             sb.Append(string.Format(WHERE, "Id", this.Id));
 
             return sb.ToString();

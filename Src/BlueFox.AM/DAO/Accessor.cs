@@ -39,12 +39,24 @@ namespace BlueFox.AM.DAO
             }
         }
 
-        public IList<Group> Load()
+        public DataTable LoadTable()
         {
-            IList<Group> ret = new List<Group>();
+            DataTable ret = new DataTable();
             using (SQLiteCommand cmd = new SQLiteCommand(this._con))
             {
-                cmd.CommandText = "Select g.rowid, g.Id as GroupId, g.GroupName, s.Id as SiteId, s.SiteName, u.Id as UrlId, u.UrlString, a.Id as AccId, a.UserName, a.Password from Group g left join Site s on g.Id = s.GroupId left join Url u on s.Id = u.SiteId left join Accout a on s.Id = a.SiteId order by g.rowid, s.SiteName";
+                cmd.CommandText = "Select g.rowid as Id, g.Id as GroupId, g.GroupName, s.Id as SiteId, s.SiteName, u.Id as UrlId, u.UrlString as URL, a.Id as AccId, a.UserName, a.Password from SiteGroup g left join Site s on g.Id = s.GroupId left join Url u on s.Id = u.SiteId left join Accout a on s.Id = a.SiteId order by g.rowid, s.SiteName";
+                SQLiteDataAdapter adapter = new SQLiteDataAdapter(cmd);
+                var count = adapter.Fill(ret);
+            }
+            return ret;
+        }
+
+        public IList<SiteGroup> Load()
+        {
+            IList<SiteGroup> ret = new List<SiteGroup>();
+            using (SQLiteCommand cmd = new SQLiteCommand(this._con))
+            {
+                cmd.CommandText = "Select g.rowid as Id, g.Id as GroupId, g.GroupName, s.Id as SiteId, s.SiteName, u.Id as UrlId, u.UrlString as URL, a.Id as AccId, a.UserName, a.Password from SiteGroup g left join Site s on g.Id = s.GroupId left join Url u on s.Id = u.SiteId left join Accout a on s.Id = a.SiteId order by g.rowid, s.SiteName";
                 #region test
                 //DataTable dat = new DataTable();
                 //SQLiteDataAdapter ada = new SQLiteDataAdapter(cmd);
@@ -57,14 +69,14 @@ namespace BlueFox.AM.DAO
                     var grp = (from loop in ret where loop.Id == grpId select loop).FirstOrDefault();
                     if (grp == null)
                     {
-                        grp = new Group(grpId, dataReader["GroupName"].ToString());
+                        grp = new SiteGroup(grpId, dataReader["GroupName"].ToString());
                         ret.Add(grp);
                     }
                     var siteId = dataReader["SiteId"].ToString();
                     var site = (from loop in grp.SiteList where loop.Id == siteId select loop).FirstOrDefault();
                     if (site == null)
                     {
-                        site = new Site(siteId, dataReader["SiteName"].ToString());
+                        site = new Site(siteId, dataReader["SiteName"].ToString(), grpId);
                         grp.SiteList.Add(site);
                     }
                     if (dataReader["UrlId"] != null && dataReader["UrlId"] != DBNull.Value && !string.IsNullOrEmpty(dataReader["UrlId"].ToString()))
@@ -73,7 +85,7 @@ namespace BlueFox.AM.DAO
                         var url = (from loop in site.UrlList where loop.Id == urlId select loop).FirstOrDefault();
                         if (url == null)
                         {
-                            url = new Url(urlId, dataReader["UrlString"].ToString());
+                            url = new Url(urlId, dataReader["UrlString"].ToString(), siteId);
                             site.UrlList.Add(url);
                         }
                     }
@@ -83,7 +95,7 @@ namespace BlueFox.AM.DAO
                         var acc = (from loop in site.AccountList where loop.Id == accId select loop).FirstOrDefault();
                         if (acc == null)
                         {
-                            acc = new Account(accId, dataReader["UserName"].ToString(), dataReader["Password"].ToString());
+                            acc = new Account(accId, dataReader["UserName"].ToString(), dataReader["Password"].ToString(), siteId);
                             site.AccountList.Add(acc);
                         }
                     }

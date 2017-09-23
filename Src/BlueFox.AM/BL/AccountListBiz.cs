@@ -19,6 +19,8 @@ namespace BlueFox.AM.BL
 
         private Accessor _access;
 
+        private IList<SiteGroup> _accountList;
+
         public AccountListBiz()
         {
             this.View = new AccountList(this);
@@ -34,25 +36,26 @@ namespace BlueFox.AM.BL
         public void Run()
         {
             var dat = this.GetAccountList();
-            this.View.DataSource = dat;
+            //this.View.DataSource = dat;
             this.View.ShowDialog();
         }
 
         public DataTable GetAccountList()
         {
-            DataTable accList = this.InitDataSource();
-            var lst = this._access.Select(new Condition());
-            foreach (var acc in lst)
-            {
-                var r = accList.NewRow();
-                r["Id"] = acc.Id;
-                r["SiteName"] = acc.SiteName;
-                r["URL"] = acc.URL;
-                r["UserName"] = acc.UserName;
-                r["Password"] = acc.Password;
-                accList.Rows.Add(r);
-            }
-            return accList;
+            //DataTable accList = this.InitDataSource();
+            var datAccountTable = this._access.LoadTable();
+            this._accountList = this._access.Load();
+            //foreach (DataRow acc in dbDataTable.Rows)
+            //{
+            //    var r = accList.NewRow();
+            //    r["Id"] = acc["rowid"];
+            //    r["SiteName"] = acc["SiteName"];
+            //    r["URL"] = acc["UrlString"];
+            //    r["UserName"] = acc["UserName"];
+            //    r["Password"] = acc["Password"];
+            //    accList.Rows.Add(r);
+            //}
+            return datAccountTable;
         }
 
         private DataTable InitDataSource()
@@ -66,25 +69,31 @@ namespace BlueFox.AM.BL
             return dat;
         }
 
-        public void DeleteAccount(IList<string> idList)
-        {
-            foreach (var id in idList)
-            {
-                Site acc = new Site();
-                acc["Id"] = id;
-                this._access.Delete(acc);
-            }
-        }
+        //public void DeleteAccount(IList<string> idList)
+        //{
+        //    if (this._datAccountTable == null)
+        //    {
+        //        return;
+        //    }
+        //    var delRows = this._datAccountTable.Select().Where(dr => idList.Contains(dr["Id"].ToString()));
+        //    var delAccIds = delRows.Select(dr => dr["AccId"].ToString());
+        //    foreach (var id in idList)
+        //    {
+        //        Site acc = new Site();
+        //        acc["Id"] = id;
+        //        this._access.Delete(acc);
+        //    }
+        //}
 
-        public string InsertAccount(Site acc)
-        {
-            return this._access.Insert(acc);
-        }
+        //public string InsertAccount(Site acc)
+        //{
+        //    return this._access.Insert(acc);
+        //}
 
-        public void UpdateAccount(Site acc)
-        {
-            this._access.Update(acc);
-        }
+        //public void UpdateAccount(Site acc)
+        //{
+        //    this._access.Update(acc);
+        //}
 
         public void Dispose()
         {

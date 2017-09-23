@@ -86,7 +86,7 @@ namespace BlueFox.AM.Setting
                     conn.ConnectionString = connsb.ToString();
                     conn.Open();
                     //创建表
-                    using (SQLiteCommand cmd = new SQLiteCommand("Create table Group(Id varchar(36) primary key, GroupName varchar(100))", conn))
+                    using (SQLiteCommand cmd = new SQLiteCommand("Create table SiteGroup(Id varchar(36) primary key, GroupName varchar(100))", conn))
                     {
                         cmd.ExecuteNonQuery();
                     }

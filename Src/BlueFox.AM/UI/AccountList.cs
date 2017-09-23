@@ -13,16 +13,9 @@ namespace BlueFox.AM.UI
 {
     public partial class AccountList : BaseForm
     {
-        public DataTable DataSource
+        public IList<SiteGroup> AccountGroupList
         {
-            get
-            {
-                return this.dgvLevel0.DataSource as DataTable;
-            }
-            set
-            {
-                this.dgvLevel0.DataSource = value;
-            }
+            get; set;
         }
 
         private AccountListBiz _biz;
@@ -34,184 +27,26 @@ namespace BlueFox.AM.UI
             InitializeComponent();
             this._isExitMenuClicked = false;
             this._biz = biz;
-            this.InitDataGrid();
-            this.dgvLevel0.SizeChanged += new EventHandler(Grid_SizeChanged);
-            this.addRowToolStripMenuItem.Click += new EventHandler(addRowToolStripMenuItem_Click);
-            this.deleteRowToolStripMenuItem.Click += new EventHandler(deleteRowToolStripMenuItem_Click);
-            this.dgvLevel0.CellEndEdit += new DataGridViewCellEventHandler(Grid_CellEndEdit);
-            this.dgvLevel0.CellClick += new DataGridViewCellEventHandler(Grid_CellClick);
             this.RemovableDrivePulled += new DelegateRemovableDrivePulled(AccountList_RemovableDrivePulled);
             this.RemovableDriveArrived += new DelegateRemovableDriveArrived(AccountList_RemovableDriveArrived);
-            this.exitToolStripMenuItem.Click += new EventHandler(exitToolStripMenuItem_Click);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.DataSource = null;
+            //this.DataSource = null;
             this._isExitMenuClicked = true;
             this.Close();
         }
 
         private void AccountList_RemovableDriveArrived(object sender, RemovableDriveEventArgs e)
         {
-            this.addRowToolStripMenuItem.Enabled = true;
-            this.deleteRowToolStripMenuItem.Enabled = true;
             this._biz.Reconnect();
-            this.DataSource = this._biz.GetAccountList();
+            //this.DataSource = this._biz.GetAccountList();
         }
 
         private void AccountList_RemovableDrivePulled(object sender, RemovableDriveEventArgs e)
         {
-            this.DataSource = null;
-            this.addRowToolStripMenuItem.Enabled = false;
-            this.deleteRowToolStripMenuItem.Enabled = false;
-        }
-
-        private void InitDataGrid()
-        {
-            this.dgvLevel0.AutoGenerateColumns = false;
-            this.dgvLevel0.RowHeadersVisible = false;
-            this.dgvLevel0.AlternatingRowsDefaultCellStyle.BackColor = SystemColors.InactiveCaption;
-            this.dgvLevel0.ScrollBars = ScrollBars.Both;
-            this.dgvLevel0.AllowUserToResizeRows = false;
-            this.dgvLevel0.AllowUserToResizeColumns = false;
-            this.dgvLevel0.AllowUserToAddRows = false;
-            this.dgvLevel0.AllowUserToDeleteRows = false;
-            this.dgvLevel0.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-
-            this.dgvLevel0.Columns.Add(this.GenerateColumn("Id", 150, false));
-            this.dgvLevel0.Columns.Add(this.GenerateColumn("SiteName", 100, true));
-            this.dgvLevel0.Columns.Add(this.GenerateColumn("URL", this.dgvLevel0.Width - 470, true));
-            this.dgvLevel0.Columns.Add(this.GenerateColumn("UserName", 150, true));
-            this.dgvLevel0.Columns.Add(this.GenerateButtonColumn("CopyUserName", 25));
-            this.dgvLevel0.Columns.Add(this.GenerateColumn("Password", 150, true));
-            this.dgvLevel0.Columns.Add(this.GenerateButtonColumn("CopyPassword", 25));
-        }
-
-        private DataGridViewColumn GenerateColumn(string name, int width, bool display)
-        {
-            var col = new DataGridViewTextBoxColumn();
-            col.Name = name;
-            col.HeaderText = name;
-            col.DataPropertyName = name;
-            col.Visible = display;
-            col.Width = width;
-            col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            return col;
-        }
-
-        private DataGridViewColumn GenerateButtonColumn(string name, int width)
-        {
-            var col = new DataGridViewButtonColumn();
-            col.Name = name;
-            col.DataPropertyName = name;
-            col.Width = width;
-            col.HeaderText = string.Empty;
-            col.Text = "C";
-            col.UseColumnTextForButtonValue = true;
-            return col;
-        }
-
-        private void Grid_SizeChanged(object sender, EventArgs e)
-        {
-            DataGridView grid = sender as DataGridView;
-            grid.Columns["URL"].Width = grid.Width - 470;
-        }
-
-        private void addRowToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (this.DataSource == null)
-            {
-                return;
-            }
-            this.DataSource.Rows.Add(this.DataSource.NewRow());
-        }
-
-        private void deleteRowToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (this.DataSource == null)
-                {
-                    return;
-                }
-                IList<string> selIds = new List<string>();
-                foreach (DataGridViewRow row in this.dgvLevel0.SelectedRows)
-                {
-                    if (row.Cells["Id"].Value == null || string.IsNullOrEmpty(row.Cells["Id"].Value.ToString()))
-                    {
-                        continue;
-                    }
-                    selIds.Add(row.Cells["Id"].Value.ToString());
-                }
-                this._biz.DeleteAccount(selIds);
-                IList<DataRow> selRows = new List<DataRow>();
-                foreach (DataRow r in this.DataSource.Rows)
-                {
-                    if (selIds.Contains(r["Id"].ToString()))
-                    {
-                        selRows.Add(r);
-                    }
-                }
-                foreach (var r in selRows)
-                {
-                    this.DataSource.Rows.Remove(r);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Grid_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                var name = this.dgvLevel0.Columns[e.ColumnIndex].DataPropertyName;
-                var row = this.DataSource.Rows[e.RowIndex];
-                Site acc = new Site();
-                acc[name] = row[name].ToString();
-                if (row["Id"] == null || string.IsNullOrEmpty(row["Id"].ToString()))
-                {
-                    row["Id"] = this._biz.InsertAccount(acc);
-                }
-                else
-                {
-                    acc["Id"] = row["id"].ToString();
-                    this._biz.UpdateAccount(acc);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void Grid_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            try
-            {
-                var name = this.dgvLevel0.Columns[e.ColumnIndex].DataPropertyName;
-                if (name == "CopyUserName" || name == "CopyPassword")
-                {
-                    if (e.RowIndex > -1)
-                    {
-                        var fieldName = this.dgvLevel0.Columns[e.ColumnIndex - 1].DataPropertyName;
-                        var objCell = this.DataSource.Rows[e.RowIndex][fieldName];
-                        if (objCell != null)
-                        {
-                            Clipboard.Clear();
-                            Clipboard.SetText(objCell.ToString());
-                            //MessageBox.Show(string.Format("{0} has been copied to clipboard.", fieldName), "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //this.DataSource = null;
         }
 
         protected override void OnLoad(EventArgs e)
